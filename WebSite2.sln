@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Parser", "Parser\Parser.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GeoCoder", "GeoCoder\GeoCoder.csproj", "{E8FA82A8-61F5-49D8-894D-476E0FC609ED}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DBConnect", "DbCreater\DBConnect.csproj", "{729E52F9-4EE3-47AC-B30E-691F2AFDC335}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -47,6 +49,10 @@ Global
 		{E8FA82A8-61F5-49D8-894D-476E0FC609ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E8FA82A8-61F5-49D8-894D-476E0FC609ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E8FA82A8-61F5-49D8-894D-476E0FC609ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{729E52F9-4EE3-47AC-B30E-691F2AFDC335}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{729E52F9-4EE3-47AC-B30E-691F2AFDC335}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{729E52F9-4EE3-47AC-B30E-691F2AFDC335}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{729E52F9-4EE3-47AC-B30E-691F2AFDC335}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
