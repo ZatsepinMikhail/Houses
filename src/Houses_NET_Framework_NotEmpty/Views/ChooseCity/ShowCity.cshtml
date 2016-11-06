@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] =ViewData["Message"];
+}
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Houses</title>
+
+    <script type="text/javascript"
+            src="http://www.google.com/jsapi?key=AIzaSyD0YOF3byJvtJlfR6_2woTLNGmHlQKPueY"></script>
+    <script type="text/javascript">
+     google.load("maps", "2");
+     function initialize() {
+        var map = new google.maps.Map2(document.getElementById("map"));
+        map.setCenter(new google.maps.LatLng("25.1", "25.1"), 10);
+        var point = new GPoint("25.1", "25.1");
+        var marker = new GMarker(point);
+        map.addOverlay(marker);
+        map.addControl(new GLargeMapControl());
+     }
+     google.setOnLoadCallback(initialize);
+    </script>
+
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+
+            <div id="map" style="width:100%;height:500px"></div>
+
+        </div>
+    </form>
+</body>
+</html>
