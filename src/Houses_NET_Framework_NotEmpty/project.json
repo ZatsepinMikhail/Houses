@@ -17,7 +17,12 @@
     "Microsoft.Extensions.Logging.Console": "1.0.0",
     "Microsoft.Extensions.Logging.Debug": "1.0.0",
     "Microsoft.Extensions.Options.ConfigurationExtensions": "1.0.0",
-    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0"
+    "Microsoft.VisualStudio.Web.BrowserLink.Loader": "14.0.0",
+    "MySql.ConnectorNET.Data": "6.8.3.2",
+    "MySql.ConnectorNET.Entity": "6.8.3.2",
+    "MySql.Data": "6.8.3",
+    "MySql.Data.Entity": "6.9.9",
+    "MySql.Web": "6.9.9"
   },
 
   "tools": {
@@ -27,7 +32,11 @@
   },
 
   "frameworks": {
-    "net452": { }
+    "net452": {
+      "frameworkAssemblies": {
+        "System.Data": "4.0.0.0"
+      }
+    }
   },
 
   "buildOptions": {

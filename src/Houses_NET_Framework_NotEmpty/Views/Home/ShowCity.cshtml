@@ -1,5 +1,7 @@
 ﻿@{
-    ViewData["Title"] =ViewData["Message"];
+    ViewData["Title"] = ViewData["lat"];
+    string lat = ViewData["lat"] as string;
+    string lng = ViewData["lng"] as string;
 }
 
 <!DOCTYPE html>
@@ -14,8 +16,8 @@
      google.load("maps", "2");
      function initialize() {
         var map = new google.maps.Map2(document.getElementById("map"));
-        map.setCenter(new google.maps.LatLng("25.1", "25.1"), 10);
-        var point = new GPoint("25.1", "25.1");
+        map.setCenter(new google.maps.LatLng(@lat, @lng), 10);
+        var point = new GPoint(@lat, @lng);
         var marker = new GMarker(point);
         map.addOverlay(marker);
         map.addControl(new GLargeMapControl());
@@ -27,9 +29,7 @@
 <body>
     <form id="form1" runat="server">
         <div>
-
             <div id="map" style="width:100%;height:500px"></div>
-
         </div>
     </form>
 </body>
