@@ -26,6 +26,15 @@
             for (var index = 0; index < lats.length; ++index) {
                 var myLatLng = { lat: lats[index], lng: lngs[index] };
                 var marker = new google.maps.Marker({
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        fillOpacity: 0.5,
+                        fillColor: '#00ff8c',   
+                        strokeOpacity: 0.5,
+                        strokeColor: '#000000',
+                        strokeWeight: 1.0, 
+                        scale: 4
+                    },
                     position: myLatLng,
                     map: map
                 });
