@@ -3,6 +3,7 @@
     string lat = ViewData["lat"] as string;
     string lng = ViewData["lng"] as string;
     string coords = ViewData["houses"] as string;
+
 }
 
 <!DOCTYPE html>
@@ -11,32 +12,29 @@
 <head runat="server">
     <title>Houses</title>
 
-    <script type="text/javascript"
-            src="http://www.google.com/jsapi?key=AIzaSyD0YOF3byJvtJlfR6_2woTLNGmHlQKPueY"></script>
     <script type="text/javascript">
-        google.load("maps", "2");
         function initialize() {
-            var map = new google.maps.Map2(document.getElementById("map"));
-            var lat = parseFloat(JSON.parse(@lat));
-            var lng = parseFloat(JSON.parse(@lng));
-            map.setCenter(new google.maps.LatLng(lat, lng), 10);
+            var map = new google.maps.Map(document.getElementById('map'), {
+                center: { lat: parseFloat(@lat), lng: parseFloat(@lng) },
+                scrollwheel: false,
+                zoom: 13
+            });
 
-            //var location = new google.maps.LatLng(@lat, @lng);
 
-            //var points = JSON.parse(@coords);
-            //for (i = 0; i < points.lentgh; i++) {
-            //    var point = new GPoint(points[i][0], points[i][1])
-            //    var marker = new GMarker(point);
-            //    map.addOverlay(marker);
-            //}
-            var point = new GPoint(lat, lng);
-            var marker = new GMarker(point);
-            map.addOverlay(marker);
-            map.addControl(new GLargeMapControl());
+
+            var myLatLng = { lat: parseFloat(@lat), lng: parseFloat(@lng) };
+
+            var marker = new google.maps.Marker({
+                position: myLatLng,
+                map: map
+            });
+
+
         }
-        google.setOnLoadCallback(initialize);
     </script>
 
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0YOF3byJvtJlfR6_2woTLNGmHlQKPueY&callback=initialize"
+            async defer></script>
 </head>
 <body>
     <form id="form1" runat="server">
