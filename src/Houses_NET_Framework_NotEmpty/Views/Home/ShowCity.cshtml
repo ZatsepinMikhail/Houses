@@ -2,8 +2,8 @@
     ViewData["Title"] = ViewData["lat"];
     string lat = ViewData["lat"] as string;
     string lng = ViewData["lng"] as string;
-    string coords = ViewData["houses"] as string;
-
+    string lats = ViewData["lats"] as string;
+    string lngs = ViewData["lngs"] as string;
 }
 
 <!DOCTYPE html>
@@ -20,16 +20,16 @@
                 zoom: 13
             });
 
+            var lats = @lats;
+            var lngs = @lngs;
 
-
-            var myLatLng = { lat: parseFloat(@lat), lng: parseFloat(@lng) };
-
-            var marker = new google.maps.Marker({
-                position: myLatLng,
-                map: map
-            });
-
-
+            for (var index = 0; index < lats.length; ++index) {
+                var myLatLng = { lat: lats[index], lng: lngs[index] };
+                var marker = new google.maps.Marker({
+                    position: myLatLng,
+                    map: map
+                });
+            }
         }
     </script>
 

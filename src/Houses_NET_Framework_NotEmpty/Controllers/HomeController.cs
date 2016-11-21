@@ -19,17 +19,22 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
 
         public IActionResult ShowCity(string city)
         {
-            Tuple<double, double> coorinates = db.GetCityCoordinate(city);
+            Tuple<double, double> coordinates = db.GetCityCoordinate(city);
+
             var jsonSerialiser = new JavaScriptSerializer();
-            String lat = jsonSerialiser.Serialize(coorinates.Item1);
-            String lng = jsonSerialiser.Serialize(coorinates.Item2);
+            String lat = jsonSerialiser.Serialize(coordinates.Item1);
+            String lng = jsonSerialiser.Serialize(coordinates.Item2);
             ViewData["city"] = city;
             ViewData["lat"] = lat;
             ViewData["lng"] = lng;
             var housesToShow = db.Select(city, 1970, 1972);
-
-            String jsonHouses = jsonSerialiser.Serialize(housesToShow);
-            ViewData["houses"] = jsonHouses;
+            var lats = housesToShow.Item1;
+            var lngs = housesToShow.Item2;
+        
+            String jsonLats = jsonSerialiser.Serialize(lats);
+            String jsonLngs = jsonSerialiser.Serialize(lngs);
+            ViewData["lats"] = jsonLats;
+            ViewData["lngs"] = jsonLngs;
             return View();
         }
     }
