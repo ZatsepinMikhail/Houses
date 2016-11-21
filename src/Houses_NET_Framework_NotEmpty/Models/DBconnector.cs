@@ -82,7 +82,7 @@ namespace Houses_NET_Framework_NotEmpty.Models
         //Select statement
         public Tuple<List<double>, List<double>> Select(string tableName, int fromYear, int toYear)
         {
-            string query = "SELECT lat, lng FROM " + tableName + " WHERE year in (" + fromYear + "," + toYear + ")";
+            string query = "SELECT lat, lng FROM " + tableName + " WHERE year >= " + fromYear + " AND year <= " + toYear + ";";
 
             //Create a list to store the result
             List<double> lats = new List<double>();

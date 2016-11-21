@@ -27,7 +27,7 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
             ViewData["city"] = city;
             ViewData["lat"] = lat;
             ViewData["lng"] = lng;
-            var housesToShow = db.Select(city, 1970, 1972);
+            var housesToShow = db.Select(city, 1930, 2016);
             var lats = housesToShow.Item1;
             var lngs = housesToShow.Item2;
         
