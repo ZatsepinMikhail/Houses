@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Houses_NET_Framework_NotEmpty.Models;
 using System.Web.Script.Serialization;
-using System.Collections.Generic;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -10,7 +9,7 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
 {
     public class HomeController : Controller
     {
-        private DBconnector db = new DBconnector("cities");
+        private DBconnector db = new DBconnector("Cities");
         
         // GET: /<controller>/
         public IActionResult Index()
@@ -20,16 +19,26 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
 
         public IActionResult ShowCity(string city)
         {
-            Tuple<double, double> coorinates = db.GetCityCoordinate(city);
+            Tuple<double, double> coordinates = db.GetCityCoordinate(city);
+
             var jsonSerialiser = new JavaScriptSerializer();
-            String lat = jsonSerialiser.Serialize(coorinates.Item1);
-            String lng = jsonSerialiser.Serialize(coorinates.Item2);
+            String lat = jsonSerialiser.Serialize(coordinates.Item1);
+            String lng = jsonSerialiser.Serialize(coordinates.Item2);
             ViewData["city"] = city;
             ViewData["lat"] = lat;
             ViewData["lng"] = lng;
-            var housesToShow = db.Select(city, 1970, 1972);
-            String jsonHouses = jsonSerialiser.Serialize(housesToShow);
-            ViewData["houses"] = jsonHouses;         
+            var housesToShow = db.Select(city, 1930, 2016);
+            var years = housesToShow.Item1;
+            var lats = housesToShow.Item2;
+            var lngs = housesToShow.Item3;
+
+            String jsonYears = jsonSerialiser.Serialize(years);
+            String jsonLats = jsonSerialiser.Serialize(lats);
+            String jsonLngs = jsonSerialiser.Serialize(lngs);
+
+            ViewData["years"] = jsonYears;
+            ViewData["lats"] = jsonLats;
+            ViewData["lngs"] = jsonLngs;
             return View();
         }
     }

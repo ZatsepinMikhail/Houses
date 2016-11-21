@@ -80,12 +80,14 @@ namespace Houses_NET_Framework_NotEmpty.Models
         }
 
         //Select statement
-        public List<Tuple<String, String>> Select(string tableName, int fromYear, int toYear)
+        public Tuple<List<int>, List<double>, List<double>> Select(string tableName, int fromYear, int toYear)
         {
-            string query = "SELECT lat, lng FROM " + tableName + " WHERE year in (" + fromYear + "," + toYear + ")";
+            string query = "SELECT year, lat, lng FROM " + tableName + " WHERE year >= " + fromYear + " AND year <= " + toYear + ";";
 
             //Create a list to store the result
-            List<Tuple<String,String>> list = new List<Tuple<String, String>>();
+            List<int> years = new List<int>();
+            List<double> lats = new List<double>();
+            List<double> lngs = new List<double>();
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -98,7 +100,9 @@ namespace Houses_NET_Framework_NotEmpty.Models
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    list.Add(new Tuple<String, String>(dataReader["lat"] + "", dataReader["lng"] + ""));
+                    years.Add(Int32.Parse(dataReader["year"] + ""));
+                    lats.Add(Double.Parse(dataReader["lat"] + ""));
+                    lngs.Add(Double.Parse(dataReader["lng"] + ""));
                 }
 
                 //close Data Reader
@@ -108,7 +112,7 @@ namespace Houses_NET_Framework_NotEmpty.Models
                 this.CloseConnection();
             }
 
-            return list;
+            return new Tuple<List<int>, List<double>, List<double>>(years, lats, lngs);
         }
 
         //Count statement
