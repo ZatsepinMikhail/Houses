@@ -35,12 +35,42 @@
 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0YOF3byJvtJlfR6_2woTLNGmHlQKPueY&callback=initialize"
             async defer></script>
+
+    <link rel="stylesheet" href="~/css/multirange.css">
+    <style> 
+        form {
+            position: relative;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+    </style>
+    <script type="text/javascript" src="~/js/outputscript.js"></script>
 </head>
 <body>
+    
     <form id="form1" runat="server">
         <div>
             <div id="map" style="width:100%;height:500px"></div>
         </div>
     </form>
+    <form>
+        <input id="rangeElement" type="range" multiple value="0,100"/>
+        <output id="fromYear"></output>
+        <output id="toYear"></output>
+    </form>
+    <script type="text/javascript" src="~/js/multirange.js"></script>
+    <script>
+        function ready() {
+            var list = document.getElementsByClassName("multirange");
+            for (var i = 0; i < list.length; i+=1) {
+                element = list[i];
+                console.log(element);
+                element.addEventListener("input", updateTextInput);
+            }
+        }
+        document.addEventListener("DOMContentLoaded", ready);
+    </script>
+    
 </body>
 </html>

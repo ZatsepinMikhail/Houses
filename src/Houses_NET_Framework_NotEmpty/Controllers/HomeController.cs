@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Houses_NET_Framework_NotEmpty.Models;
 using System.Web.Script.Serialization;
+using System.Collections.Generic;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -9,7 +10,7 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
 {
     public class HomeController : Controller
     {
-        private DBconnector db = new DBconnector("Cities");
+        private DBconnector db = new DBconnector("cities");
         
         // GET: /<controller>/
         public IActionResult Index()
@@ -27,9 +28,8 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
             ViewData["lat"] = lat;
             ViewData["lng"] = lng;
             var housesToShow = db.Select(city, 1970, 1972);
-
             String jsonHouses = jsonSerialiser.Serialize(housesToShow);
-            ViewData["houses"] = jsonHouses;
+            ViewData["houses"] = jsonHouses;         
             return View();
         }
     }

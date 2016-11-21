@@ -27,7 +27,7 @@ namespace Houses_NET_Framework_NotEmpty.Models
             database = databaseName;
 
             uid = "root";
-            password = "Trofeo360$";
+            password = "12logitech12";
             string connectionString;
             connectionString = "SERVER=" + server + ";" + "DATABASE=" +
             database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
