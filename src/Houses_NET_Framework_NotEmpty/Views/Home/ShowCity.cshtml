@@ -4,6 +4,7 @@
     string lng = ViewData["lng"] as string;
     string lats = ViewData["lats"] as string;
     string lngs = ViewData["lngs"] as string;
+    string years = ViewData["years"] as string;
 }
 
 <!DOCTYPE html>
@@ -13,6 +14,13 @@
     <title>Houses</title>
 
     <script type="text/javascript">
+
+        function getColor(year) {
+            //years 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010
+            var colors = ['#a50000', '#eaa400', '#f2ff00', '#5bc400', '#006032', '#009b86', '#150091', '#4a0060', '#96007a'];
+            return colors[Math.floor((year - 1930) / 10)];
+        }
+
         function initialize() {
             var map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: parseFloat(@lat), lng: parseFloat(@lng) },
@@ -20,6 +28,7 @@
                 zoom: 13
             });
 
+            var years = @years;
             var lats = @lats;
             var lngs = @lngs;
 
@@ -29,7 +38,7 @@
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
                         fillOpacity: 0.5,
-                        fillColor: '#00ff8c',   
+                        fillColor: getColor(years[index]),   
                         strokeOpacity: 0.5,
                         strokeColor: '#000000',
                         strokeWeight: 1.0, 

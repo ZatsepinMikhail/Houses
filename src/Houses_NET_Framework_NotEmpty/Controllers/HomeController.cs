@@ -28,11 +28,15 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
             ViewData["lat"] = lat;
             ViewData["lng"] = lng;
             var housesToShow = db.Select(city, 1930, 2016);
-            var lats = housesToShow.Item1;
-            var lngs = housesToShow.Item2;
-        
+            var years = housesToShow.Item1;
+            var lats = housesToShow.Item2;
+            var lngs = housesToShow.Item3;
+
+            String jsonYears = jsonSerialiser.Serialize(years);
             String jsonLats = jsonSerialiser.Serialize(lats);
             String jsonLngs = jsonSerialiser.Serialize(lngs);
+
+            ViewData["years"] = jsonYears;
             ViewData["lats"] = jsonLats;
             ViewData["lngs"] = jsonLngs;
             return View();
