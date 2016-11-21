@@ -80,12 +80,12 @@ namespace Houses_NET_Framework_NotEmpty.Models
         }
 
         //Select statement
-        public List<Tuple<double, double>> Select(string tableName, int fromYear, int toYear)
+        public List<Tuple<String, String>> Select(string tableName, int fromYear, int toYear)
         {
             string query = "SELECT lat, lng FROM " + tableName + " WHERE year in (" + fromYear + "," + toYear + ")";
 
             //Create a list to store the result
-            List<Tuple<double, double>> list = new List<Tuple<double, double>>();
+            List<Tuple<String,String>> list = new List<Tuple<String, String>>();
 
             //Open connection
             if (this.OpenConnection() == true)
@@ -98,7 +98,7 @@ namespace Houses_NET_Framework_NotEmpty.Models
                 //Read the data and store them in the list
                 while (dataReader.Read())
                 {
-                    list.Add(new Tuple<double, double>(Single.Parse(dataReader["lat"] + ""), Single.Parse(dataReader["lng"] + "")));
+                    list.Add(new Tuple<String, String>(dataReader["lat"] + "", dataReader["lng"] + ""));
                 }
 
                 //close Data Reader
