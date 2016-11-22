@@ -9,7 +9,7 @@ namespace Houses_NET_Framework_NotEmpty.Controllers
 {
     public class HomeController : Controller
     {
-        private DBconnector db = new DBconnector("Cities");
+        private DBconnector db = new DBconnector("cities");
         
         // GET: /<controller>/
         public IActionResult Index()

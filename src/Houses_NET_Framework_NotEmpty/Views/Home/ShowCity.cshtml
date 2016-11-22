@@ -14,7 +14,15 @@
     <title>Houses</title>
 
     <script type="text/javascript">
-
+        var markerArray = [];
+        var years;
+        var lats;
+        var lngs;
+        var map;
+        var maxYear = 0; 
+        var minYear = 2017;
+        var currentFromYear = 0;
+        var currentToYear = 2017;
         function getColor(year) {
             //years 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010
             var colors = ['#a50000', '#eaa400', '#f2ff00', '#5bc400', '#006032', '#009b86', '#150091', '#4a0060', '#96007a'];
@@ -22,32 +30,25 @@
         }
 
         function initialize() {
-            var map = new google.maps.Map(document.getElementById('map'), {
+            map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: parseFloat(@lat), lng: parseFloat(@lng) },
                 scrollwheel: false,
                 zoom: 13
             });
-
-            var years = @years;
-            var lats = @lats;
-            var lngs = @lngs;
-
-            for (var index = 0; index < lats.length; ++index) {
-                var myLatLng = { lat: lats[index], lng: lngs[index] };
-                var marker = new google.maps.Marker({
-                    icon: {
-                        path: google.maps.SymbolPath.CIRCLE,
-                        fillOpacity: 0.5,
-                        fillColor: getColor(years[index]),   
-                        strokeOpacity: 0.5,
-                        strokeColor: '#000000',
-                        strokeWeight: 1.0, 
-                        scale: 4
-                    },
-                    position: myLatLng,
-                    map: map
-                });
-            }
+            years = @years;  
+            for (var i = 0, l = years.length; i < l; i++)
+            {
+                if (years[i] < minYear)
+                    minYear = years[i];
+                if (years[i] > maxYear)
+                    maxYear = years[i];
+            }    
+            currentFromYear = minYear;
+            currentToYear = maxYear;
+            document.getElementById("fromYear").innerHTML = minYear;
+            document.getElementById("toYear").innerHTML = maxYear;
+            lats = @lats;
+            lngs = @lngs;            
         }
     </script>
 
@@ -74,8 +75,9 @@
     </form>
     <form>
         <input id="rangeElement" type="range" multiple value="0,100"/>
-        <output id="fromYear"></output>
-        <output id="toYear"></output>
+        <output id="fromYear">minYear</output>
+        <output id="toYear">maxYear</output>
+        <button type="button" onclick="onClick()">Show!</button>
     </form>
     <script type="text/javascript" src="~/js/multirange.js"></script>
     <script>
@@ -85,7 +87,9 @@
                 element = list[i];
                 console.log(element);
                 element.addEventListener("input", updateTextInput);
-            }
+            }  
+            document.getElementById("fromYear").innerHTML = minYear;
+            document.getElementById("toYear").innerHTML = maxYear;
         }
         document.addEventListener("DOMContentLoaded", ready);
     </script>
