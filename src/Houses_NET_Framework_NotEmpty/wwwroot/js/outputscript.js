@@ -3,37 +3,31 @@ function updateTextInput() {
     var arr = str.split(",");
     var first = Math.floor(minYear + (maxYear - minYear) * (arr[0] / 100));
     var second = Math.floor(minYear + (maxYear - minYear) * (arr[1] / 100));
+
+    previousFromYear = currentFromYear;
+    previousToYear = currentToYear;
+
     currentFromYear = first;
     currentToYear = second;
+
     document.getElementById('fromYear').innerHTML = first;
     document.getElementById('toYear').innerHTML = second;
 }
 
 function onClick() {
-    for (var i = 0, l = markerArray.length; i < l; i++)
-    {
-        var marker = markerArray[i];
-        marker.setMap(null);
+    for (var year = previousFromYear; year < previousToYear; ++year) {
+        yearIndex = year - minYear;
+        for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
+            var marker = markerArray[yearIndex][i];
+            marker.setVisible(false);
+        }
     }
-    markerArray = [];
 
-    for (var index = 0; index < lats.length; ++index) {
-        if (currentFromYear < years[index] && years[index] < currentToYear) {
-            var myLatLng = { lat: lats[index], lng: lngs[index] };
-            var marker = new google.maps.Marker({
-                icon: {
-                    path: google.maps.SymbolPath.CIRCLE,
-                    fillOpacity: 0.5,
-                    fillColor: getColor(years[index]),
-                    strokeOpacity: 0.5,
-                    strokeColor: '#000000',
-                    strokeWeight: 1.0,
-                    scale: 4
-                },
-                position: myLatLng,
-                map: map
-            });
-            markerArray.push(marker);
+    for (var year = currentFromYear; year <= currentToYear; ++year) {
+        yearIndex = year - minYear;
+        for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
+            var marker = markerArray[yearIndex][i];
+            marker.setVisible(true);
         }
     }
 }
