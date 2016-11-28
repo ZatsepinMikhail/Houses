@@ -1,0 +1,4 @@
+SERVER:localhost
+UID:root
+PASSWORD:Trofeo360$
+DATABASE:cities

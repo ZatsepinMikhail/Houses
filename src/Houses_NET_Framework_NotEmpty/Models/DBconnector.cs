@@ -10,27 +10,20 @@ namespace Houses_NET_Framework_NotEmpty.Models
     public class DBconnector
     {
         private MySqlConnection connection;
-        private string server;
-        private string database;
-        private string uid;
-        private string password;
+        private ConfigStorer configs;
 
-        public DBconnector(string databaseName)
+        public DBconnector()
         {
-            Initialize(databaseName);
+            configs = new ConfigStorer();
+            Initialize();
         }
 
         //Initialize values
-        private void Initialize(string databaseName)
+        private void Initialize()
         {
-            server = "localhost";
-            database = databaseName;
-
-            uid = "root";
-            password = "12logitech12";
             string connectionString;
-            connectionString = "SERVER=" + server + ";" + "DATABASE=" +
-            database + ";" + "UID=" + uid + ";" + "PASSWORD=" + password + ";";
+            connectionString = "SERVER=" + configs.server + ";" + "DATABASE=" +
+                configs.database + ";" + "UID=" + configs.uid + ";" + "PASSWORD=" + configs.password + ";";
 
             connection = new MySqlConnection(connectionString);
         }
@@ -136,10 +129,10 @@ namespace Houses_NET_Framework_NotEmpty.Models
             return count;
         }
 
-        public Tuple<double, double> GetCityCoordinate(string cityName)
+        public Tuple<double, double, int> GetCityInfo(string cityName)
         {
-            string query = "SELECT lat, lng FROM coordinates WHERE city = \"" + cityName + "\";";
-            Tuple<double, double> result = new Tuple<double, double>(0.0, 0.0);
+            string query = "SELECT lat, lng, first_year FROM cities_info WHERE city = \"" + cityName + "\";";
+            Tuple<double, double, int> result = new Tuple<double, double, int>(0.0, 0.0, 0);
 
             if (this.OpenConnection() == true)
             {
@@ -151,8 +144,7 @@ namespace Houses_NET_Framework_NotEmpty.Models
                 //Read the data and store them in the list
                 if (dataReader.Read())
                 {
-                    result = new Tuple<double, double>(Single.Parse(dataReader["lat"] + ""), Single.Parse(dataReader["lng"] + ""));
-
+                    result = new Tuple<double, double, int>(Single.Parse(dataReader["lat"] + ""), Single.Parse(dataReader["lng"] + ""), Int32.Parse(dataReader["first_year"] + ""));
                 }
 
                 //close Data Reader
