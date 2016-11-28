@@ -22,14 +22,14 @@
         var map;
 
         var maxYear = 2016;
-        var minYear = parseInt(@first_year);
+        var minYear = @first_year;
 
         var currentFromYear = 0;
         var currentToYear = 2016;
 
-        //empty range
-        var previousFromYear = 2016;
-        var previousToYear = 2015;
+        //empty range; set in control
+        var newFromYear = 2016;
+        var newToYear = 2015;
 
         function getColor(year) {
             //years 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010
@@ -44,13 +44,12 @@
                 zoom: 13
             });
 
-            currentFromYear = minYear;
-            currentToYear = maxYear;
+            currentFromYear = -1; //minYear;
+            currentToYear = -1; //maxYear;
             document.getElementById("fromYear").innerHTML = minYear;
             document.getElementById("toYear").innerHTML = maxYear;
 
             for (var yearProcessed = minYear; yearProcessed <= maxYear; ++yearProcessed) {
-                Console.log(yearProcessed);
                 markerArray.push([]);
             }
             for (var index = 0; index < lats.length; ++index) {
@@ -90,9 +89,91 @@
         }
     </style>
     <script type="text/javascript" src="~/js/outputscript.js"></script>
+
+
+    <script type="text/javascript">
+        
+        function onClick() {
+
+            var previousFromYear = currentFromYear;
+            var previousToYear = currentToYear;
+            
+            currentFromYear = newFromYear;
+            currentToYear = newToYear;
+
+            var rangesHide = [];
+            var rangesShow = [];
+
+            console.log(previousFromYear);
+            console.log(previousToYear);
+            console.log(currentFromYear);
+            console.log(currentToYear);
+
+            if (previousFromYear == -1 && previousToYear == -1) {
+                rangesShow.push([currentFromYear, currentToYear]);
+            } else if (previousFromYear == currentFromYear) {
+                if (previousToYear <= currentToYear) {
+                    rangesShow.push([previousToYear + 1, currentToYear]);
+                }
+                else {
+                    rangesHide.push([currentToYear + 1, previousToYear]);
+                }
+            } else if (previousToYear == currentToYear) {
+                if (previosFromYear >= currentFromYear) {
+                    rangesShow.push([currentFromYear, previousFromYear - 1]);
+                }
+                else {
+                    rangesHide.push([previousFromYear, currentFromYear - 1]);
+                }
+            }
+
+            //12 -> 34
+
+            //no intersection: 1234, 3412
+            /*if (previousFromYear > currentToYear || previousToYear < currentFromYear) {
+            rangesHide.push([previousFromYear, previousToYear]);
+            rangesShow.push([currentFromYear, currentToYear]);
+            }
+            else if (currentFromYear < previousToYear) {
+            if (currentFromYear < previousFromYear) {
+            //
+            if (currentToYear < previosToYear)
+            }
+            } else if (currentFromYear == previousToYear) {
+
+            }*/
+
+            for (var i = 0; i < rangesHide.length; ++i) {
+                var fromYear = rangesHide[i][0];
+                var toYear = rangesHide[i][1];
+
+                for (var year = fromYear; year <= toYear; ++year) {
+                    yearIndex = year - minYear;
+                    for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
+                        var marker = markerArray[yearIndex][i];
+                        marker.setVisible(false);
+                    }
+                }
+            }
+
+            for (var i = 0; i < rangesShow.length; ++i) {
+                var fromYear = rangesShow[i][0];
+                var toYear = rangesShow[i][1];
+
+                for (var year = fromYear; year <= toYear; ++year) {
+                    yearIndex = year - minYear;
+                    for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
+                        var marker = markerArray[yearIndex][i];
+                        marker.setVisible(true);
+                    }
+                }
+            }
+        }
+        </script>
+
 </head>
 <body>
-    
+
     <form id="form1" runat="server">
         <div>
             <div id="map" style="width:100%;height:500px"></div>
