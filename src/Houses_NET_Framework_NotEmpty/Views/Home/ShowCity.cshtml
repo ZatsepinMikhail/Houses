@@ -125,10 +125,10 @@
             var rangesHide = [];
             var rangesShow = [];
 
-            console.log(previousFromYear);
-            console.log(previousToYear);
-            console.log(currentFromYear);
-            console.log(currentToYear);
+            //console.log(previousFromYear);
+            //console.log(previousToYear);
+            //console.log(currentFromYear);
+            //console.log(currentToYear);
 
             if (previousFromYear == -1 && previousToYear == -1) {
                 rangesShow.push([currentFromYear, currentToYear]);
@@ -182,9 +182,9 @@
 
                 for (var year = fromYear; year <= toYear; ++year) {
                     yearIndex = year - minYear;
-                    console.log('fromYear =', fromYear);
-                    console.log('toYear =', toYear);
-                    console.log('yearIndex =', yearIndex);
+                    //console.log('fromYear =', fromYear);
+                    //console.log('toYear =', toYear);
+                    //console.log('yearIndex =', yearIndex);
                     for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
                         var marker = markerArray[yearIndex][i];
                         marker.setVisible(false);
