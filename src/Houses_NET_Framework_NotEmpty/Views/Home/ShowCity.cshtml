@@ -25,12 +25,13 @@
         var maxYear = 2016;
         var minYear = @first_year;
 
-        var currentFromYear = 0;
-        var currentToYear = 2016;
+        var currentFromYear = -1;
+        var currentToYear = -1;
 
         //empty range; set in control
-        var newFromYear = 2016;
-        var newToYear = 2015;
+        var newFromYear = minYear;
+        var newToYear = maxYear;
+
         var colors = ['#a50000', '#eaa400', '#f2ff00', '#5bc400', '#006032', '#009b86', '#150091', '#4a0060', '#96007a'];
 
         function getColor(year) {
@@ -75,14 +76,12 @@
         function initialize() {
             map = new google.maps.Map(document.getElementById('map'), {
                 center: { lat: parseFloat(@lat), lng: parseFloat(@lng) },
-                scrollwheel: false,
+                scrollwheel: true,
                 zoom: 13
             });
             map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push
                 (document.getElementById('legend'));
             createLegend();
-            currentFromYear = -1; //minYear;
-            currentToYear = -1; //maxYear;
             document.getElementById("fromYear").innerHTML = minYear;
             document.getElementById("toYear").innerHTML = maxYear;
 
@@ -91,6 +90,8 @@
             }
             for (var index = 0; index < lats.length; ++index) {
                 yearIndex = years[index] - minYear;
+
+                //console.log(yearIndex, years[index]);
 
                 var coords = { lat: lats[index], lng: lngs[index] };
                 var marker = new google.maps.Marker({
@@ -112,32 +113,7 @@
                 markerArray[yearIndex].push(marker);
             }
         }
-    </script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0YOF3byJvtJlfR6_2woTLNGmHlQKPueY&callback=initialize"
-            async defer></script>
-
-    <link rel="stylesheet" href="~/css/multirange.css">
-    <style> 
-        form {
-            position: relative;
-        }
-        input[type="range"] {
-            width: 100%;
-        }   
-        #legend {
-            font-family: Arial, sans-serif;
-            background: #fff;
-            padding: 10px;
-            margin: 10px;
-            border: 3px solid #000;
-        }
-    </style>
-    <script type="text/javascript" src="~/js/outputscript.js"></script>
-
-
-    <script type="text/javascript">
-        
         function onClick() {
 
             var previousFromYear = currentFromYear;
@@ -170,30 +146,45 @@
                 else {
                     rangesHide.push([previousFromYear, currentFromYear - 1]);
                 }
-            }
-
-            //12 -> 34
 
             //no intersection: 1234, 3412
-            /*if (previousFromYear > currentToYear || previousToYear < currentFromYear) {
-            rangesHide.push([previousFromYear, previousToYear]);
-            rangesShow.push([currentFromYear, currentToYear]);
+            } else if (previousFromYear > currentToYear || previousToYear < currentFromYear) {
+                rangesHide.push([previousFromYear, previousToYear]);
+                rangesShow.push([currentFromYear, currentToYear]);
+            //...
+            } else if (currentFromYear <= previousToYear) {
+                if (currentFromYear <= previousFromYear) {
+                    //3142
+                    if (currentToYear <= previousToYear) {
+                        rangesShow.push([currentFromYear, previousFromYear - 1]);
+                        rangesHide.push([currentToYear + 1, previousToYear]);
+                    //3124
+                    } else {
+                        rangesShow.push([currentFromYear, previousFromYear - 1]);
+                        rangesShow.push([previousToYear + 1, currentToYear]);                    
+                    }
+                } else {
+                    //1342
+                    if (currentToYear <= previousToYear) {
+                        rangesHide.push([previousFromYear, currentFromYear -1]);
+                        rangesHide.push([currentToYear + 1, previousToYear]);
+                    //1324
+                    } else {
+                        rangesHide.push([previousFromYear, currentFromYear - 1]);
+                        rangesShow.push([previousToYear + 1, currentToYear]);
+                    }
+                }
             }
-            else if (currentFromYear < previousToYear) {
-            if (currentFromYear < previousFromYear) {
-            //
-            if (currentToYear < previosToYear)
-            }
-            } else if (currentFromYear == previousToYear) {
 
-            }*/
-
-            for (var i = 0; i < rangesHide.length; ++i) {
-                var fromYear = rangesHide[i][0];
-                var toYear = rangesHide[i][1];
+            for (var rangeIndex = 0; rangeIndex < rangesHide.length; ++rangeIndex) {
+                var fromYear = rangesHide[rangeIndex][0];
+                var toYear = rangesHide[rangeIndex][1];
 
                 for (var year = fromYear; year <= toYear; ++year) {
                     yearIndex = year - minYear;
+                    console.log('fromYear =', fromYear);
+                    console.log('toYear =', toYear);
+                    console.log('yearIndex =', yearIndex);
                     for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
                         var marker = markerArray[yearIndex][i];
                         marker.setVisible(false);
@@ -201,11 +192,13 @@
                 }
             }
 
-            for (var i = 0; i < rangesShow.length; ++i) {
-                var fromYear = rangesShow[i][0];
-                var toYear = rangesShow[i][1];
+            for (var rangeIndex = 0; rangeIndex < rangesShow.length; ++rangeIndex) {
+                var fromYear = rangesShow[rangeIndex][0];
+                var toYear = rangesShow[rangeIndex][1];
 
                 for (var year = fromYear; year <= toYear; ++year) {
+
+                    console.log('yearIndex =', yearIndex);
                     yearIndex = year - minYear;
                     for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
                         var marker = markerArray[yearIndex][i];
@@ -214,7 +207,29 @@
                 }
             }
         }
-        </script>
+
+    </script>
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD0YOF3byJvtJlfR6_2woTLNGmHlQKPueY&callback=initialize"
+            async defer></script>
+
+    <link rel="stylesheet" href="~/css/multirange.css">
+    <style> 
+        form {
+            position: relative;
+        }
+        input[type="range"] {
+            width: 100%;
+        }   
+        #legend {
+            font-family: Arial, sans-serif;
+            background: #fff;
+            padding: 10px;
+            margin: 10px;
+            border: 3px solid #000;
+        }
+    </style>
+    <script type="text/javascript" src="~/js/outputscript.js"></script>
 
 </head>
 <body>

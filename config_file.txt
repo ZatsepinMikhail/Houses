@@ -1,4 +1,4 @@
-SERVER:127.0.0.1
+SERVER:localhost
 UID:root
-PASSWORD:12logitech12
+PASSWORD:Trofeo360$
 DATABASE:cities
