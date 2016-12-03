@@ -52,7 +52,7 @@
                 divColor.innerHTML = '<div style="width: 10px; height: 10px; background-color:' + colors[index] + '; border: 1px; top: 1px;"> ';
                 legend.appendChild(divColor);
                 var divText = document.createElement('div');
-                var nextYear = year + 10;
+                var nextYear = year + 9;
                     
                 var str;
                 if (index != 0) {
@@ -125,6 +125,22 @@
             }
         }
 
+        function changeMarkers(ranges, visibility) {
+            
+            for (var rangeIndex = 0; rangeIndex < ranges.length; ++rangeIndex) {
+                var fromYear = ranges[rangeIndex][0];
+                var toYear = ranges[rangeIndex][1];
+
+                for (var year = fromYear; year <= toYear; ++year) {
+                    yearIndex = year - minYear;
+                    for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
+                        var marker = markerArray[yearIndex][i];
+                        marker.setVisible(visibility);
+                    }
+                }
+            } 
+        }
+
         function onClick() {
 
             var previousFromYear = currentFromYear;
@@ -135,11 +151,6 @@
 
             var rangesHide = [];
             var rangesShow = [];
-
-            //console.log(previousFromYear);
-            //console.log(previousToYear);
-            //console.log(currentFromYear);
-            //console.log(currentToYear);
 
             if (previousFromYear == -1 && previousToYear == -1) {
                 rangesShow.push([currentFromYear, currentToYear]);
@@ -158,18 +169,18 @@
                     rangesHide.push([previousFromYear, currentFromYear - 1]);
                 }
 
-            //no intersection: 1234, 3412
+                //no intersection: 1234, 3412
             } else if (previousFromYear > currentToYear || previousToYear < currentFromYear) {
                 rangesHide.push([previousFromYear, previousToYear]);
                 rangesShow.push([currentFromYear, currentToYear]);
-            //...
+                //...
             } else if (currentFromYear <= previousToYear) {
                 if (currentFromYear <= previousFromYear) {
                     //3142
                     if (currentToYear <= previousToYear) {
                         rangesShow.push([currentFromYear, previousFromYear - 1]);
                         rangesHide.push([currentToYear + 1, previousToYear]);
-                    //3124
+                        //3124
                     } else {
                         rangesShow.push([currentFromYear, previousFromYear - 1]);
                         rangesShow.push([previousToYear + 1, currentToYear]);                    
@@ -179,7 +190,7 @@
                     if (currentToYear <= previousToYear) {
                         rangesHide.push([previousFromYear, currentFromYear -1]);
                         rangesHide.push([currentToYear + 1, previousToYear]);
-                    //1324
+                        //1324
                     } else {
                         rangesHide.push([previousFromYear, currentFromYear - 1]);
                         rangesShow.push([previousToYear + 1, currentToYear]);
@@ -187,36 +198,43 @@
                 }
             }
 
-            for (var rangeIndex = 0; rangeIndex < rangesHide.length; ++rangeIndex) {
-                var fromYear = rangesHide[rangeIndex][0];
-                var toYear = rangesHide[rangeIndex][1];
+            changeMarkers(rangesHide, false);
+            changeMarkers(rangesShow, true);
+        }
 
-                for (var year = fromYear; year <= toYear; ++year) {
-                    yearIndex = year - minYear;
-                    //console.log('fromYear =', fromYear);
-                    //console.log('toYear =', toYear);
-                    //console.log('yearIndex =', yearIndex);
-                    for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
-                        var marker = markerArray[yearIndex][i];
-                        marker.setVisible(false);
-                    }
-                }
+        function sleep(ms) {
+            return new Promise(resolve => setTimeout(resolve, ms));
+        }
+
+        function showHistory() {
+
+            var startYear = newFromYear;
+            var finishYear = newToYear;
+
+            if (currentFromYear != -1 && currentToYear != -1) {
+                var rangesHide = [[currentFromYear, currentToYear]]
+                changeMarkers(rangesHide, false);
             }
 
-            for (var rangeIndex = 0; rangeIndex < rangesShow.length; ++rangeIndex) {
-                var fromYear = rangesShow[rangeIndex][0];
-                var toYear = rangesShow[rangeIndex][1];
+            currentFromYear = minYear;
+            currentToYear = finishYear;
 
-                for (var year = fromYear; year <= toYear; ++year) {
+            var rangesShow = [[minYear, startYear - 1]];
+            changeMarkers(rangesShow, true);
 
-                    console.log('yearIndex =', yearIndex);
-                    yearIndex = year - minYear;
-                    for (var i = 0, l = markerArray[yearIndex].length; i < l; ++i) {
-                        var marker = markerArray[yearIndex][i];
-                        marker.setVisible(true);
+            //in ms
+            var delayTime = 1000;
+
+            (function theLoop (year, maxYear) {
+                setTimeout(function () {
+                    var rangesShow = [[year, year]];
+                    document.getElementById('showYear').innerHTML = year;
+                    changeMarkers(rangesShow, true);
+                    if (++year <= maxYear) {
+                        theLoop(year, maxYear);
                     }
-                }
-            }
+                }, delayTime);
+            })(startYear, finishYear);
         }
 
     </script>
@@ -247,7 +265,7 @@
 
     <form id="form1" runat="server">
         <div>
-            <div id="map" style="width:100%;height:500px"></div>
+            <div id="map" style="width:100%;height:520px"></div>
         </div>
     </form>
     <form>
@@ -255,6 +273,8 @@
         <output id="fromYear">minYear</output>
         <output id="toYear">maxYear</output>
         <button type="button" onclick="onClick()">Show!</button>
+        <button type="button" onclick="showHistory()">Show history</button>
+        <output id="showYear">showYear</output>
     </form>
     <script type="text/javascript" src="~/js/multirange.js"></script>
     <script>
